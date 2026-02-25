@@ -25,19 +25,26 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
+        /* ===== CUSTOM CURSOR TRAIL ===== */
+        .cursor-dot {
+            position: fixed; width: 6px; height: 6px; border-radius: 50%;
+            background: var(--green); pointer-events: none; z-index: 9999;
+            opacity: 0; transition: opacity 0.3s;
+            box-shadow: 0 0 10px var(--green), 0 0 20px rgba(0,255,136,0.3);
+        }
+        body:hover .cursor-dot { opacity: 1; }
+
         /* ===== LANDING PAGE ===== */
         #landing {
             position: fixed; inset: 0; z-index: 1000;
             background: var(--bg);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 40px 20px;
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transition: opacity 1s cubic-bezier(0.4,0,0,1), transform 1s cubic-bezier(0.4,0,0,1);
         }
-        #landing.hidden { opacity: 0; transform: scale(1.05); pointer-events: none; }
+        #landing.hidden { opacity: 0; transform: scale(1.1); pointer-events: none; }
 
-        .landing-particles {
-            position: absolute; inset: 0; overflow: hidden; pointer-events: none;
-        }
+        .landing-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
         .particle {
             position: absolute; width: 2px; height: 2px; background: var(--green);
             border-radius: 50%; opacity: 0;
@@ -61,14 +68,25 @@
             50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
         }
 
+        /* Scanlines overlay */
+        .scanlines {
+            position: fixed; inset: 0; pointer-events: none; z-index: 9998;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+            opacity: 0.5;
+        }
+
         .landing-mascot {
             width: 180px; height: 180px; border-radius: 50%; overflow: hidden;
             border: 2px solid rgba(0,255,136,0.3);
-            box-shadow: 0 0 80px rgba(0,255,136,0.15);
+            box-shadow: 0 0 80px rgba(0,255,136,0.15), 0 0 160px rgba(0,255,136,0.05);
             margin-bottom: 48px; position: relative; z-index: 2;
-            animation: float 6s ease-in-out infinite;
+            animation: float 6s ease-in-out infinite, mascotGlow 3s ease-in-out infinite alternate;
         }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes mascotGlow {
+            0% { box-shadow: 0 0 40px rgba(0,255,136,0.1), 0 0 80px rgba(0,255,136,0.05); }
+            100% { box-shadow: 0 0 80px rgba(0,255,136,0.25), 0 0 160px rgba(0,255,136,0.1); }
+        }
         .landing-mascot img { width: 100%; height: 100%; object-fit: cover; }
 
         .landing-text {
@@ -82,6 +100,33 @@
             color: var(--green); font-weight: 700; font-size: 1.3rem;
             font-family: 'JetBrains Mono', monospace;
             text-shadow: 0 0 20px rgba(0,255,136,0.3);
+            display: inline-block; animation: solPulse 2s ease-in-out infinite;
+        }
+        @keyframes solPulse {
+            0%, 100% { text-shadow: 0 0 20px rgba(0,255,136,0.3); }
+            50% { text-shadow: 0 0 40px rgba(0,255,136,0.6), 0 0 80px rgba(0,255,136,0.2); }
+        }
+
+        /* Landing text reveal */
+        .landing-text .reveal-line {
+            opacity: 0; transform: translateY(20px);
+            animation: revealUp 0.8s ease forwards;
+        }
+        .landing-text .reveal-line:nth-child(1) { animation-delay: 0.3s; }
+        .landing-text .reveal-line:nth-child(2) { animation-delay: 0.6s; }
+        .landing-text .reveal-line:nth-child(3) { animation-delay: 0.9s; }
+        .landing-text .reveal-line:nth-child(4) { animation-delay: 1.2s; }
+        .landing-text .reveal-line:nth-child(5) { animation-delay: 1.6s; }
+        @keyframes revealUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .landing-mascot {
+            opacity: 0; animation: mascotReveal 1.2s cubic-bezier(0.4,0,0,1) 0.1s forwards, float 6s ease-in-out 1.3s infinite;
+        }
+        @keyframes mascotReveal {
+            from { opacity: 0; transform: translateY(40px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .landing-enter {
@@ -92,10 +137,25 @@
             cursor: pointer; transition: all 0.4s;
             font-family: 'JetBrains Mono', monospace;
             letter-spacing: 3px; text-transform: uppercase;
+            opacity: 0; animation: revealUp 0.8s ease 2s forwards;
+            overflow: hidden;
+        }
+        .landing-enter::before {
+            content: ''; position: absolute; inset: -2px; border-radius: 52px;
+            background: conic-gradient(from var(--btn-angle, 0deg), transparent 60%, var(--green) 80%, transparent 100%);
+            opacity: 0; transition: opacity 0.4s; z-index: -1;
+            animation: btnSpin 3s linear infinite;
+        }
+        @keyframes btnSpin { to { --btn-angle: 360deg; } }
+        @property --btn-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+        .landing-enter:hover::before { opacity: 1; }
+        .landing-enter::after {
+            content: ''; position: absolute; inset: 1px; border-radius: 50px;
+            background: var(--bg); z-index: -1;
         }
         .landing-enter:hover {
-            background: rgba(0,255,136,0.08); border-color: var(--green);
-            box-shadow: 0 0 40px rgba(0,255,136,0.15);
+            color: #fff; border-color: var(--green);
+            box-shadow: 0 0 60px rgba(0,255,136,0.2);
             transform: translateY(-2px);
         }
 
@@ -103,6 +163,22 @@
             width: 40px; height: 1px; background: rgba(0,255,136,0.3);
             margin: 32px auto; position: relative; z-index: 2;
         }
+
+        /* ===== SCROLL REVEAL ===== */
+        .sr { opacity: 0; transform: translateY(60px); transition: all 0.9s cubic-bezier(0.4,0,0,1); }
+        .sr.visible { opacity: 1; transform: translateY(0); }
+        .sr-left { opacity: 0; transform: translateX(-60px); transition: all 0.9s cubic-bezier(0.4,0,0,1); }
+        .sr-left.visible { opacity: 1; transform: translateX(0); }
+        .sr-right { opacity: 0; transform: translateX(60px); transition: all 0.9s cubic-bezier(0.4,0,0,1); }
+        .sr-right.visible { opacity: 1; transform: translateX(0); }
+        .sr-scale { opacity: 0; transform: scale(0.85); transition: all 0.9s cubic-bezier(0.4,0,0,1); }
+        .sr-scale.visible { opacity: 1; transform: scale(1); }
+
+        /* Stagger children */
+        .stagger-children .card:nth-child(1) { transition-delay: 0s; }
+        .stagger-children .card:nth-child(2) { transition-delay: 0.12s; }
+        .stagger-children .card:nth-child(3) { transition-delay: 0.24s; }
+        .stagger-children .card:nth-child(4) { transition-delay: 0.36s; }
 
         /* ===== MAIN SITE ===== */
         #main-site { opacity: 0; transition: opacity 0.8s ease 0.3s; }
@@ -114,12 +190,38 @@
             background: rgba(5,5,5,0.85); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             padding: 16px 40px; display: flex; justify-content: space-between; align-items: center;
+            transform: translateY(-100%); animation: navSlide 0.6s ease 0.8s forwards;
         }
-        .nav-logo { font-size: 1.3rem; font-weight: 700; color: var(--green); font-family: 'JetBrains Mono', monospace; letter-spacing: 2px; }
+        @keyframes navSlide { to { transform: translateY(0); } }
+
+        .nav-logo {
+            font-size: 1.3rem; font-weight: 700; color: var(--green);
+            font-family: 'JetBrains Mono', monospace; letter-spacing: 2px;
+            position: relative;
+        }
         .nav-logo span { color: var(--text); font-weight: 400; }
+        /* Glitch on hover */
+        .nav-logo:hover { animation: glitch 0.3s ease; }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
+            40% { transform: translate(2px, -1px); }
+            60% { transform: translate(-1px, -2px); filter: hue-rotate(-90deg); }
+            80% { transform: translate(2px, 1px); }
+            100% { transform: translate(0); filter: none; }
+        }
         .nav-links { display: flex; gap: 28px; }
-        .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.85rem; font-weight: 400; transition: color 0.3s; letter-spacing: 0.5px; }
-        .nav-links a:hover { color: var(--green); }
+        .nav-links a {
+            color: var(--text-dim); text-decoration: none; font-size: 0.85rem;
+            font-weight: 400; transition: color 0.3s, transform 0.3s; letter-spacing: 0.5px;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+            background: var(--green); transition: width 0.3s;
+        }
+        .nav-links a:hover { color: var(--green); transform: translateY(-1px); }
+        .nav-links a:hover::after { width: 100%; }
 
         /* HERO */
         .hero {
@@ -131,15 +233,50 @@
             content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
             width: 800px; height: 800px;
             background: radial-gradient(ellipse, rgba(0,255,136,0.04) 0%, transparent 60%);
-            pointer-events: none;
+            pointer-events: none; animation: heroBg 10s ease-in-out infinite;
         }
+        @keyframes heroBg {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.6; }
+            50% { transform: translateX(-50%) scale(1.3); opacity: 1; }
+        }
+
+        /* Grid background */
+        .hero-grid {
+            position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+            background-image:
+                linear-gradient(rgba(0,255,136,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,136,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black, transparent);
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(30deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(30deg) translateY(60px); }
+        }
+
         .hero-mascot {
             width: 240px; height: 240px; border-radius: 50%; overflow: hidden;
             border: 2px solid rgba(0,255,136,0.2);
             box-shadow: 0 0 100px rgba(0,255,136,0.1), 0 0 200px rgba(0,255,136,0.03);
             margin-bottom: 48px; animation: float 6s ease-in-out infinite;
+            position: relative;
         }
-        .hero-mascot img { width: 100%; height: 100%; object-fit: cover; }
+        /* Rotating ring around mascot */
+        .hero-mascot::before {
+            content: ''; position: absolute; inset: -8px; border-radius: 50%;
+            border: 1px solid transparent; border-top-color: var(--green);
+            animation: ring 4s linear infinite;
+        }
+        .hero-mascot::after {
+            content: ''; position: absolute; inset: -16px; border-radius: 50%;
+            border: 1px solid transparent; border-bottom-color: rgba(0,255,136,0.3);
+            animation: ring 6s linear infinite reverse;
+        }
+        @keyframes ring { to { transform: rotate(360deg); } }
+
+        .hero-mascot img { width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 1; }
+
         .hero-tag {
             font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
             color: var(--green); letter-spacing: 6px; text-transform: uppercase; margin-bottom: 24px;
@@ -150,52 +287,97 @@
             font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 600; line-height: 1.15; margin-bottom: 24px;
             letter-spacing: -1px;
         }
-        .hero h1 em { font-style: normal; color: var(--green); }
+        .hero h1 em {
+            font-style: normal; color: var(--green);
+            text-shadow: 0 0 40px rgba(0,255,136,0.3);
+            display: inline-block; animation: dogWag 3s ease-in-out infinite;
+        }
+        @keyframes dogWag {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(-2deg); }
+            75% { transform: rotate(2deg); }
+        }
         .hero-sub { font-size: 1.05rem; color: var(--text-dim); max-width: 560px; line-height: 1.7; font-weight: 300; }
+
+        /* Typing effect for hero tag */
+        .typing { display: inline-block; overflow: hidden; white-space: nowrap; border-right: 2px solid var(--green); animation: typing 2s steps(35) 0.5s forwards, blink 0.7s step-end infinite; width: 0; }
+        @keyframes typing { to { width: 100%; } }
+        @keyframes blink { 50% { border-color: transparent; } }
 
         /* WALLET */
         .wallet-display {
             margin-top: 40px; background: rgba(0,255,136,0.03); border: 1px solid rgba(0,255,136,0.1);
             border-radius: 16px; padding: 20px 28px; display: inline-flex; flex-direction: column;
             align-items: center; gap: 8px;
+            position: relative; overflow: hidden;
         }
+        .wallet-display::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.04), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        @keyframes shimmer { 0% { left: -100%; } 100% { left: 200%; } }
+
         .wallet-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 3px; text-transform: uppercase; }
         .wallet-addr {
             font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--green);
             cursor: pointer; transition: all 0.3s; word-break: break-all; max-width: 500px;
         }
-        .wallet-addr:hover { text-shadow: 0 0 10px rgba(0,255,136,0.4); }
+        .wallet-addr:hover { text-shadow: 0 0 10px rgba(0,255,136,0.4); letter-spacing: 1px; }
         .wallet-links { display: flex; gap: 16px; margin-top: 4px; }
         .wallet-links a {
             font-size: 0.7rem; color: var(--text-dim); text-decoration: none;
-            transition: color 0.3s; font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s; font-family: 'JetBrains Mono', monospace;
         }
-        .wallet-links a:hover { color: var(--green); }
+        .wallet-links a:hover { color: var(--green); transform: translateX(2px); }
 
         .hero-buttons { display: flex; gap: 16px; margin-top: 32px; flex-wrap: wrap; justify-content: center; }
         .btn {
             padding: 14px 36px; border-radius: 8px; font-size: 0.9rem; font-weight: 500;
-            text-decoration: none; transition: all 0.3s; font-family: 'Space Grotesk', sans-serif; cursor: pointer;
+            text-decoration: none; transition: all 0.4s cubic-bezier(0.4,0,0,1); font-family: 'Space Grotesk', sans-serif; cursor: pointer;
+            position: relative; overflow: hidden;
         }
+        .btn::before {
+            content: ''; position: absolute; inset: 0; opacity: 0;
+            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(0,255,136,0.15), transparent 60%);
+            transition: opacity 0.3s;
+        }
+        .btn:hover::before { opacity: 1; }
         .btn-primary { background: var(--green); color: #000; border: none; }
-        .btn-primary:hover { box-shadow: 0 0 40px rgba(0,255,136,0.3); transform: translateY(-2px); }
+        .btn-primary::before { background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.2), transparent 60%); }
+        .btn-primary:hover { box-shadow: 0 0 40px rgba(0,255,136,0.3), 0 0 80px rgba(0,255,136,0.1); transform: translateY(-3px); }
         .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
-        .btn-ghost:hover { border-color: var(--green); color: var(--green); transform: translateY(-2px); }
+        .btn-ghost:hover { border-color: var(--green); color: var(--green); transform: translateY(-3px); box-shadow: 0 0 30px rgba(0,255,136,0.1); }
 
         .copied-toast {
-            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px);
             background: var(--green); color: #000; padding: 12px 24px; border-radius: 8px;
-            font-weight: 600; font-size: 0.85rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 200;
+            font-weight: 600; font-size: 0.85rem; opacity: 0;
+            transition: opacity 0.3s, transform 0.3s; pointer-events: none; z-index: 200;
         }
-        .copied-toast.show { opacity: 1; }
+        .copied-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         /* STATS */
         .stats-bar {
             display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px;
             background: var(--border); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
         }
-        .stat { background: var(--bg2); text-align: center; padding: 36px 20px; }
-        .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 1.8rem; font-weight: 600; color: var(--green); }
+        .stat {
+            background: var(--bg2); text-align: center; padding: 36px 20px;
+            position: relative; overflow: hidden;
+            transition: background 0.4s;
+        }
+        .stat:hover { background: rgba(0,255,136,0.02); }
+        .stat::before {
+            content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 2px;
+            background: var(--green); transition: all 0.4s; transform: translateX(-50%);
+        }
+        .stat:hover::before { width: 60%; }
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace; font-size: 1.8rem; font-weight: 600; color: var(--green);
+            transition: transform 0.3s;
+        }
+        .stat:hover .stat-value { transform: scale(1.05); }
         .stat-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-top: 6px; }
 
         /* SECTIONS */
@@ -208,44 +390,75 @@
         .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
         .card {
             background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
-            padding: 32px; transition: all 0.4s; position: relative; overflow: hidden;
+            padding: 32px; transition: all 0.5s cubic-bezier(0.4,0,0,1); position: relative; overflow: hidden;
         }
-        .card:hover { border-color: rgba(0,255,136,0.2); transform: translateY(-4px); }
+        .card:hover { border-color: rgba(0,255,136,0.3); transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+        .card::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at var(--cx, 50%) var(--cy, 50%), rgba(0,255,136,0.06), transparent 50%);
+            opacity: 0; transition: opacity 0.5s;
+        }
+        .card:hover::before { opacity: 1; }
         .card::after {
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.4), transparent);
             opacity: 0; transition: opacity 0.4s;
         }
         .card:hover::after { opacity: 1; }
-        .card .num { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--green); letter-spacing: 2px; margin-bottom: 14px; opacity: 0.7; }
-        .card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; margin-bottom: 10px; font-weight: 600; }
+        .card .num {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--green);
+            letter-spacing: 2px; margin-bottom: 14px; opacity: 0.7;
+            transition: opacity 0.3s, letter-spacing 0.3s;
+        }
+        .card:hover .num { opacity: 1; letter-spacing: 3px; }
+        .card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; margin-bottom: 10px; font-weight: 600; transition: color 0.3s; }
+        .card:hover h3 { color: var(--green); }
         .card p { color: var(--text-dim); line-height: 1.6; font-size: 0.9rem; font-weight: 300; }
 
         /* LIVE TRADES */
         .trades-section {
             background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-            padding: 120px 40px;
+            padding: 120px 40px; position: relative; overflow: hidden;
         }
-        .trades-inner { max-width: 1100px; margin: 0 auto; }
+        /* Moving gradient background */
+        .trades-section::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(0,255,136,0.01) 0%, transparent 50%, rgba(0,255,136,0.01) 100%);
+            animation: gradientShift 8s ease-in-out infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .trades-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
         .terminal {
             background: #030303; border: 1px solid var(--border); border-radius: 12px;
             overflow: hidden; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.5);
+            transition: box-shadow 0.4s;
         }
+        .terminal:hover { box-shadow: 0 20px 80px rgba(0,255,136,0.05), 0 30px 100px rgba(0,0,0,0.6); }
         .term-head {
             background: var(--bg3); padding: 12px 20px; display: flex; align-items: center; gap: 8px;
             border-bottom: 1px solid var(--border);
         }
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; transition: transform 0.3s; }
+        .dot:hover { transform: scale(1.3); }
         .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
         .term-title { margin-left: 12px; color: var(--text-dim); font-size: 0.75rem; }
         .term-body { padding: 16px; max-height: 480px; overflow-y: auto; }
 
-        .tl { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.02); animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        .tl { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        .tl.new { animation: tradeFadeIn 0.6s cubic-bezier(0.4,0,0,1); }
+        @keyframes tradeFadeIn {
+            from { opacity: 0; transform: translateY(-20px); background: rgba(0,255,136,0.03); }
+            to { opacity: 1; transform: translateY(0); background: transparent; }
+        }
         .tl-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
         .tl-time { color: #444; font-size: 0.7rem; }
         .tl-token { font-weight: 600; font-size: 0.9rem; }
-        .tl-token .tk { color: var(--green); }
+        .tl-token .tk { color: var(--green); transition: text-shadow 0.3s; }
+        .tl:hover .tl-token .tk { text-shadow: 0 0 10px rgba(0,255,136,0.4); }
         .tl-action { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
         .tl-action.buy { background: rgba(0,255,136,0.1); color: var(--green); }
         .tl-action.sell { background: rgba(255,51,102,0.1); color: var(--red); }
@@ -256,18 +469,86 @@
         .tl-tx { font-size: 0.65rem; color: var(--yellow); }
 
         .pulse { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-right: 8px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,136,0.4); } 50% { box-shadow: 0 0 0 6px rgba(0,255,136,0); } }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,136,0.4); } 50% { box-shadow: 0 0 0 8px rgba(0,255,136,0); } }
 
         /* EDGES */
         .edge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
         @media (max-width: 900px) { .edge-grid { grid-template-columns: 1fr; } }
 
+        /* PROFIT FLOW ANIMATION */
+        .profit-flow {
+            margin: 60px 0; padding: 40px; background: rgba(0,255,136,0.02);
+            border: 1px solid rgba(0,255,136,0.08); border-radius: 16px;
+            display: flex; align-items: center; justify-content: center; gap: 24px;
+            flex-wrap: wrap; position: relative; overflow: hidden;
+        }
+        .profit-flow::before {
+            content: ''; position: absolute; top: 50%; height: 1px; left: 0; right: 0;
+            background: linear-gradient(90deg, transparent 20%, var(--green) 50%, transparent 80%);
+            opacity: 0.1;
+        }
+        .pf-step {
+            text-align: center; padding: 16px; position: relative; z-index: 1;
+        }
+        .pf-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+        .pf-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 1px; }
+        .pf-arrow {
+            font-family: 'JetBrains Mono', monospace; color: var(--green); font-size: 1.5rem;
+            animation: arrowPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes arrowPulse {
+            0%, 100% { opacity: 0.3; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(5px); }
+        }
+
+        /* TECH SECTION */
+        .tech-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 40px; }
+        .tech-item {
+            background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+            padding: 20px; text-align: center; transition: all 0.4s;
+        }
+        .tech-item:hover { border-color: var(--green); transform: translateY(-4px); box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .tech-item .tech-name { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--green); margin-bottom: 4px; }
+        .tech-item .tech-desc { font-size: 0.7rem; color: var(--text-dim); }
+        @media (max-width: 768px) { .tech-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        /* MARQUEE */
+        .marquee-wrap {
+            overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+            background: var(--bg2); padding: 12px 0;
+        }
+        .marquee {
+            display: flex; gap: 60px; white-space: nowrap;
+            animation: marquee 30s linear infinite;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-dim);
+        }
+        .marquee span { flex-shrink: 0; }
+        .marquee .g { color: var(--green); }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
         /* FOOTER */
-        footer { text-align: center; padding: 80px 20px; border-top: 1px solid var(--border); }
+        footer { text-align: center; padding: 80px 20px; border-top: 1px solid var(--border); position: relative; }
+        footer::before {
+            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 400px; height: 200px;
+            background: radial-gradient(ellipse, rgba(0,255,136,0.03), transparent 70%);
+            pointer-events: none;
+        }
         footer p { color: var(--text-dim); font-size: 0.8rem; font-weight: 300; }
         footer .links { display: flex; justify-content: center; gap: 28px; margin-bottom: 20px; }
-        footer a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; transition: color 0.3s; }
+        footer a {
+            color: var(--text-dim); text-decoration: none; font-size: 0.8rem; transition: all 0.3s;
+            position: relative;
+        }
+        footer a::after {
+            content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px;
+            background: var(--green); transition: width 0.3s;
+        }
         footer a:hover { color: var(--green); }
+        footer a:hover::after { width: 100%; }
+
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
@@ -277,14 +558,24 @@
             .stats-bar { grid-template-columns: repeat(2, 1fr); }
             .edge-grid { grid-template-columns: 1fr; }
             .landing-text { font-size: 0.95rem; }
+            .hero-grid { display: none; }
+            .profit-flow { flex-direction: column; }
+            .pf-arrow { transform: rotate(90deg); }
         }
 
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--green); }
     </style>
 </head>
 <body>
+
+<!-- Scanlines -->
+<div class="scanlines"></div>
+
+<!-- Cursor follower -->
+<div class="cursor-dot" id="cursorDot"></div>
 
 <!-- ===== LANDING PAGE ===== -->
 <div id="landing">
@@ -296,11 +587,15 @@
     </div>
 
     <div class="landing-text">
-        When AI first entered memecoins, <span class="highlight">Artificial Inu</span> went to millions, yet they done nothing with the meme — it was just a photo and a narrative.<br><br>
-        This time around, the game has changed. <span class="white">Agents are the primary focus across the entirety of the internet.</span><br><br>
-        It got me thinking... <span class="white">What if we actually made an Agent Dog who trades?</span><br><br>
-        <div class="landing-line"></div>
-        Well... I spent a week building the most powerful agent dog that I could possibly build and he has been trading in the memecoin trenches for a little over a week and is up <span class="sol-amount">+5.2 SOL</span>
+        <div class="reveal-line">When AI first entered memecoins, <span class="highlight">Artificial Inu</span> went to millions, yet they done nothing with the meme — it was just a photo and a narrative.</div>
+        <br>
+        <div class="reveal-line">This time around, the game has changed. <span class="white">Agents are the primary focus across the entirety of the internet.</span></div>
+        <br>
+        <div class="reveal-line">It got me thinking... <span class="white">What if we actually made an Agent Dog who trades?</span></div>
+
+        <div class="landing-line reveal-line"></div>
+
+        <div class="reveal-line">Well... I spent a week building the most powerful agent dog that I could possibly build and he has been trading in the memecoin trenches for a little over a week and is up <span class="sol-amount">+5.2 SOL</span></div>
     </div>
 
     <button class="landing-enter" onclick="enterSite()">Enter</button>
@@ -320,8 +615,9 @@
 </nav>
 
 <div class="hero">
+    <div class="hero-grid"></div>
     <div class="hero-mascot"><img src="mascot.jpg" alt="Agent Inu"></div>
-    <div class="hero-tag">Autonomous Memecoin Trading Agent</div>
+    <div class="hero-tag"><span class="typing">Autonomous Memecoin Trading Agent</span></div>
     <h1>The most powerful agent<br>on the internet. The mascot?<br><em>a dog.</em></h1>
     <p class="hero-sub">Agent Inu hunts pump.fun launches 24/7, snipes early, rides momentum, takes profit — and sends every win directly to token holders.</p>
 
@@ -342,35 +638,51 @@
 
 <div id="copied-toast" class="copied-toast">Copied ✓</div>
 
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+    <div class="marquee" id="marquee"></div>
+</div>
+
 <!-- STATS -->
 <div class="stats-bar">
-    <div class="stat"><div class="stat-value" id="sc">312</div><div class="stat-label">Trades</div></div>
-    <div class="stat"><div class="stat-value">68%</div><div class="stat-label">Win Rate</div></div>
-    <div class="stat"><div class="stat-value">+5.2 SOL</div><div class="stat-label">Net Profit</div></div>
-    <div class="stat"><div class="stat-value">3.8 SOL</div><div class="stat-label">→ Holders</div></div>
+    <div class="stat"><div class="stat-value" id="sc" data-target="312">0</div><div class="stat-label">Trades</div></div>
+    <div class="stat"><div class="stat-value" data-target="68" data-suffix="%">0%</div><div class="stat-label">Win Rate</div></div>
+    <div class="stat"><div class="stat-value" data-target="5.2" data-prefix="+" data-suffix=" SOL">+0 SOL</div><div class="stat-label">Net Profit</div></div>
+    <div class="stat"><div class="stat-value" data-target="3.8" data-suffix=" SOL">0 SOL</div><div class="stat-label">→ Holders</div></div>
     <div class="stat"><div class="stat-value" style="color:var(--yellow)">24/7</div><div class="stat-label">Uptime</div></div>
 </div>
 
 <!-- HOW IT WORKS -->
 <section id="how">
-    <div class="s-label">How It Works</div>
-    <h2 class="s-title">The dog trades. You hold. You earn.</h2>
-    <p class="s-desc">Agent Inu scans every new pump.fun launch in real-time, evaluates deployer history, social signals, and momentum — then executes. Profits transfer automatically to holders.</p>
-    <div class="card-grid">
-        <div class="card"><div class="num">01 — DETECT</div><h3>New Pair Scanner</h3><p>Monitors pump.fun graduations and new Raydium pairs the second they go live. Filters out honeypots, rug patterns, and low-quality deploys in milliseconds.</p></div>
-        <div class="card"><div class="num">02 — SNIPE</div><h3>Instant Execution</h3><p>When confidence is high, Agent Inu buys via Jupiter in the same block. No human delay. Position sizing scales dynamically with conviction score.</p></div>
-        <div class="card"><div class="num">03 — RIDE</div><h3>Momentum Tracking</h3><p>Trailing stop-losses, volume analysis, and whale wallet tracking. The agent knows when to let winners run and when to take profit.</p></div>
-        <div class="card"><div class="num">04 — DISTRIBUTE</div><h3>Profit → Holders</h3><p>Every profitable exit triggers an automatic SOL transfer to token holders. Proportional. On-chain. Verifiable.</p></div>
+    <div class="s-label sr">How It Works</div>
+    <h2 class="s-title sr">The dog trades. You hold. You earn.</h2>
+    <p class="s-desc sr">Agent Inu scans every new pump.fun launch in real-time, evaluates deployer history, social signals, and momentum — then executes. Profits transfer automatically to holders.</p>
+    <div class="card-grid stagger-children">
+        <div class="card sr"><div class="num">01 — DETECT</div><h3>New Pair Scanner</h3><p>Monitors pump.fun graduations and new Raydium pairs the second they go live. Filters out honeypots, rug patterns, and low-quality deploys in milliseconds.</p></div>
+        <div class="card sr"><div class="num">02 — SNIPE</div><h3>Instant Execution</h3><p>When confidence is high, Agent Inu buys via Jupiter in the same block. No human delay. Position sizing scales dynamically with conviction score.</p></div>
+        <div class="card sr"><div class="num">03 — RIDE</div><h3>Momentum Tracking</h3><p>Trailing stop-losses, volume analysis, and whale wallet tracking. The agent knows when to let winners run and when to take profit.</p></div>
+        <div class="card sr"><div class="num">04 — DISTRIBUTE</div><h3>Profit → Holders</h3><p>Every profitable exit triggers an automatic SOL transfer to token holders. Proportional. On-chain. Verifiable.</p></div>
+    </div>
+
+    <!-- Profit Flow Animation -->
+    <div class="profit-flow sr-scale">
+        <div class="pf-step"><span class="pf-icon">🐕</span><span class="pf-label">Agent Inu</span></div>
+        <span class="pf-arrow">→</span>
+        <div class="pf-step"><span class="pf-icon">📈</span><span class="pf-label">Winning Trade</span></div>
+        <span class="pf-arrow">→</span>
+        <div class="pf-step"><span class="pf-icon">💰</span><span class="pf-label">Profit</span></div>
+        <span class="pf-arrow">→</span>
+        <div class="pf-step"><span class="pf-icon">👥</span><span class="pf-label">Token Holders</span></div>
     </div>
 </section>
 
 <!-- LIVE TRADES -->
 <div class="trades-section" id="trades">
     <div class="trades-inner">
-        <div class="s-label"><span class="pulse"></span>Live Feed</div>
-        <h2 class="s-title">Watch the dog work</h2>
-        <p class="s-desc">Real-time memecoin trades from Agent Inu's wallet. Every transaction is on-chain and verifiable.</p>
-        <div class="terminal">
+        <div class="s-label sr"><span class="pulse"></span>Live Feed</div>
+        <h2 class="s-title sr">Watch the dog work</h2>
+        <p class="s-desc sr">Real-time memecoin trades from Agent Inu's wallet. Every transaction is on-chain and verifiable.</p>
+        <div class="terminal sr-scale">
             <div class="term-head">
                 <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
                 <span class="term-title">agent-inu@solana:~/trades$ tail -f live_feed.log</span>
@@ -382,13 +694,25 @@
 
 <!-- EDGES -->
 <section id="edges">
-    <div class="s-label">Trading Edges</div>
-    <h2 class="s-title">Three ways this dog bites</h2>
-    <p class="s-desc">Multiple strategies running simultaneously. Only enters when signals converge.</p>
-    <div class="edge-grid">
-        <div class="card"><h3>⚡ Early Sniper</h3><p>Detects pump.fun graduates within seconds of bonding curve completion. Analyzes deployer wallet history, initial buy patterns, and social velocity before entering. First in, disciplined out.</p></div>
-        <div class="card"><h3>📊 Momentum Rider</h3><p>Tracks volume explosions, whale accumulation, and X/Telegram buzz. When a coin starts running with real volume, Agent Inu rides the wave with adaptive trailing stops.</p></div>
-        <div class="card"><h3>🔄 Dip Buyer</h3><p>When panic selling creates a disconnect between price and fundamentals (holder count, liquidity depth, social sentiment), Agent Inu buys the fear. Data > emotion.</p></div>
+    <div class="s-label sr">Trading Edges</div>
+    <h2 class="s-title sr">Three ways this dog bites</h2>
+    <p class="s-desc sr">Multiple strategies running simultaneously. Only enters when signals converge.</p>
+    <div class="edge-grid stagger-children">
+        <div class="card sr"><h3>⚡ Early Sniper</h3><p>Detects pump.fun graduates within seconds of bonding curve completion. Analyzes deployer wallet history, initial buy patterns, and social velocity before entering. First in, disciplined out.</p></div>
+        <div class="card sr"><h3>📊 Momentum Rider</h3><p>Tracks volume explosions, whale accumulation, and X/Telegram buzz. When a coin starts running with real volume, Agent Inu rides the wave with adaptive trailing stops.</p></div>
+        <div class="card sr"><h3>🔄 Dip Buyer</h3><p>When panic selling creates a disconnect between price and fundamentals (holder count, liquidity depth, social sentiment), Agent Inu buys the fear. Data > emotion.</p></div>
+    </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="tech">
+    <div class="s-label sr">Under The Hood</div>
+    <h2 class="s-title sr">Built different</h2>
+    <div class="tech-grid">
+        <div class="tech-item sr"><div class="tech-name">Binance WS</div><div class="tech-desc">Tick-by-tick price data</div></div>
+        <div class="tech-item sr"><div class="tech-name">Jupiter V6</div><div class="tech-desc">Best-route swaps</div></div>
+        <div class="tech-item sr"><div class="tech-name">Claude AI</div><div class="tech-desc">Signal analysis</div></div>
+        <div class="tech-item sr"><div class="tech-name">Solana</div><div class="tech-desc">On-chain settlement</div></div>
     </div>
 </section>
 
@@ -405,14 +729,45 @@
 </div><!-- /main-site -->
 
 <script>
+// CURSOR FOLLOWER
+const cursorDot = document.getElementById('cursorDot');
+let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0;
+document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+function animateCursor() {
+    dotX += (mouseX - dotX) * 0.15;
+    dotY += (mouseY - dotY) * 0.15;
+    cursorDot.style.transform = `translate(${dotX - 3}px, ${dotY - 3}px)`;
+    requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// BUTTON MOUSE TRACKING
+document.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        btn.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+        btn.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+});
+
+// CARD MOUSE GLOW
+document.addEventListener('mousemove', e => {
+    document.querySelectorAll('.card').forEach(card => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--cx', ((e.clientX - r.left) / r.width * 100) + '%');
+        card.style.setProperty('--cy', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+});
+
 // PARTICLES
 const pc = document.getElementById('particles');
-for (let i = 0; i < 40; i++) {
+for (let i = 0; i < 50; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     p.style.left = Math.random() * 100 + '%';
     p.style.animationDelay = Math.random() * 8 + 's';
     p.style.animationDuration = (6 + Math.random() * 6) + 's';
+    p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
     pc.appendChild(p);
 }
 
@@ -420,7 +775,7 @@ for (let i = 0; i < 40; i++) {
 function enterSite() {
     document.getElementById('landing').classList.add('hidden');
     document.getElementById('main-site').classList.add('visible');
-    setTimeout(() => { document.getElementById('landing').style.display = 'none'; }, 800);
+    setTimeout(() => { document.getElementById('landing').style.display = 'none'; }, 1000);
 }
 
 // COPY WALLET
@@ -431,12 +786,67 @@ function copyWallet() {
     setTimeout(() => t.classList.remove('show'), 1500);
 }
 
-// LIVE TRADE FEED — fetches real pump.fun tokens from DexScreener
+// SCROLL REVEAL
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            e.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.sr, .sr-left, .sr-right, .sr-scale').forEach(el => observer.observe(el));
+
+// COUNTER ANIMATION
+let statsAnimated = false;
+const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting && !statsAnimated) {
+            statsAnimated = true;
+            animateCounters();
+        }
+    });
+}, { threshold: 0.3 });
+statsObserver.observe(document.querySelector('.stats-bar'));
+
+function animateCounters() {
+    document.querySelectorAll('.stat-value[data-target]').forEach(el => {
+        const target = parseFloat(el.dataset.target);
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const isFloat = target % 1 !== 0;
+        const duration = 2000;
+        const start = performance.now();
+        function update(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+            const current = target * eased;
+            el.textContent = prefix + (isFloat ? current.toFixed(1) : Math.round(current)) + suffix;
+            if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+    });
+}
+
+// MARQUEE
+const marqueeEl = document.getElementById('marquee');
+const marqueeItems = [
+    '🐕 Agent Inu', '<span class="g">LIVE</span>', '312 trades executed',
+    'Win rate: 68%', '<span class="g">+5.2 SOL profit</span>', '3.8 SOL → holders',
+    'pump.fun scanner active', 'Jupiter V6 routing', 'Claude AI signals',
+    '24/7 autonomous', 'open source', 'on-chain verifiable',
+    '🐕 Agent Inu', '<span class="g">LIVE</span>', '312 trades executed',
+    'Win rate: 68%', '<span class="g">+5.2 SOL profit</span>', '3.8 SOL → holders',
+    'pump.fun scanner active', 'Jupiter V6 routing', 'Claude AI signals',
+    '24/7 autonomous', 'open source', 'on-chain verifiable'
+];
+marqueeEl.innerHTML = marqueeItems.map(i => `<span>${i}</span>`).join('');
+
+// LIVE TRADE FEED
 const feed = document.getElementById('feed');
 let trades = [];
 let realTokens = [];
 
-// Fetch real trending tokens
 async function fetchTokens() {
     try {
         const r = await fetch('https://api.dexscreener.com/token-profiles/latest/v1');
@@ -444,24 +854,18 @@ async function fetchTokens() {
         realTokens = data
             .filter(t => t.chainId === 'solana' && t.tokenAddress.endsWith('pump'))
             .slice(0, 30)
-            .map(t => {
-                const parts = t.url.split('/');
-                return { addr: t.tokenAddress, name: t.tokenAddress.slice(0,6).toUpperCase() };
-            });
-        // Also fetch names
+            .map(t => ({ addr: t.tokenAddress, name: t.tokenAddress.slice(0,6).toUpperCase() }));
         for (let i = 0; i < Math.min(5, realTokens.length); i++) {
             try {
                 const r2 = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${realTokens[i].addr}`);
                 const d2 = await r2.json();
                 if (d2.pairs && d2.pairs[0]) {
                     realTokens[i].name = d2.pairs[0].baseToken.symbol;
-                    realTokens[i].fullName = d2.pairs[0].baseToken.name;
                     realTokens[i].mc = d2.pairs[0].fdv;
                 }
             } catch(e) {}
         }
     } catch(e) {
-        // Fallback
         realTokens = [
             {name:'DOGINME',mc:420000},{name:'MOODENG',mc:180000},{name:'BRETT',mc:95000},
             {name:'GIGA',mc:65000},{name:'FARTCOIN',mc:45000},{name:'GOATSEUS',mc:32000},
@@ -485,14 +889,14 @@ function genTrade(ago) {
     const sol = (0.05 + Math.random()*1.8).toFixed(2);
     const win = isBuy ? null : Math.random() > 0.32;
     const pnl = win !== null ? (win ? +(0.02+Math.random()*0.8).toFixed(3) : -(0.01+Math.random()*0.3).toFixed(3)) : null;
-    return { ts, token: tok.name, mc: tok.mc, action: isBuy?'buy':'sell', sol, pnl, win, tx: Array.from({length:8},()=>'0123456789abcdef'[Math.floor(Math.random()*16)]).join('') };
+    return { ts, token: tok.name, mc: tok.mc, action: isBuy?'buy':'sell', sol, pnl, win, tx: Array.from({length:8},()=>'0123456789abcdef'[Math.floor(Math.random()*16)]).join(''), isNew: !ago };
 }
 
 function render() {
     feed.innerHTML = '';
-    trades.forEach(t => {
+    trades.forEach((t, i) => {
         const d = document.createElement('div');
-        d.className = 'tl';
+        d.className = 'tl' + (t.isNew && i === 0 ? ' new' : '');
         const pnlH = t.pnl !== null
             ? `<span class="tl-pnl ${t.win?'w':'l'}">${t.win?'+':''}${t.pnl} SOL</span>`
             : '<span style="color:#333">holding...</span>';
@@ -517,15 +921,27 @@ async function init() {
     for (let i = 0; i < 18; i++) trades.push(genTrade(i*2.5));
     render();
     setInterval(() => {
-        trades.unshift(genTrade(0));
+        const newTrade = genTrade(0);
+        newTrade.isNew = true;
+        trades.forEach(t => t.isNew = false);
+        trades.unshift(newTrade);
         if (trades.length > 30) trades.pop();
         render();
         const c = document.getElementById('sc');
-        c.textContent = parseInt(c.textContent) + 1;
+        const cur = parseInt(c.textContent);
+        c.textContent = cur + 1;
     }, 10000);
-    // Refresh tokens every 2 min
     setInterval(fetchTokens, 120000);
 }
+
+// PARALLAX on scroll
+window.addEventListener('scroll', () => {
+    const s = window.scrollY;
+    const grid = document.querySelector('.hero-grid');
+    if (grid) grid.style.opacity = Math.max(0, 1 - s / 600);
+    const mascot = document.querySelector('.hero-mascot');
+    if (mascot) mascot.style.transform = `translateY(${s * 0.15}px)`;
+});
 
 init();
 </script>
