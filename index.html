@@ -595,7 +595,7 @@
 
         <div class="landing-line reveal-line"></div>
 
-        <div class="reveal-line">Well... I spent a week building the most powerful agent dog that I could possibly build and he has been trading in the memecoin trenches for a little over a week and is up <span class="sol-amount">+5.2 SOL</span></div>
+        <div class="reveal-line">Well... I spent a week building the most powerful agent dog that I could possibly build and he has been trading in the memecoin trenches for a little over a week and is up <span class="sol-amount">+18.4 SOL</span></div>
     </div>
 
     <button class="landing-enter" onclick="enterSite()">Enter</button>
@@ -623,10 +623,10 @@
 
     <div class="wallet-display">
         <div class="wallet-label">Agent Inu's Wallet — Track Everything On-Chain</div>
-        <div class="wallet-addr" onclick="copyWallet()">BFWnDMbNCJ3upH6FpErNTsxJXPK37abzp6XawWUEYcgD</div>
+        <div class="wallet-addr" onclick="copyWallet()">MA6tTqNicK73yPAQRzrQSk7VtJwTy9nnJoFxKmpG8Rg</div>
         <div class="wallet-links">
-            <a href="https://solscan.io/account/BFWnDMbNCJ3upH6FpErNTsxJXPK37abzp6XawWUEYcgD" target="_blank">Solscan ↗</a>
-            <a href="https://birdeye.so/profile/BFWnDMbNCJ3upH6FpErNTsxJXPK37abzp6XawWUEYcgD?chain=solana" target="_blank">Birdeye ↗</a>
+            <a href="https://solscan.io/account/MA6tTqNicK73yPAQRzrQSk7VtJwTy9nnJoFxKmpG8Rg" target="_blank">Solscan ↗</a>
+            <a href="https://birdeye.so/profile/MA6tTqNicK73yPAQRzrQSk7VtJwTy9nnJoFxKmpG8Rg?chain=solana" target="_blank">Birdeye ↗</a>
         </div>
     </div>
 
@@ -645,10 +645,10 @@
 
 <!-- STATS -->
 <div class="stats-bar">
-    <div class="stat"><div class="stat-value" id="sc" data-target="312">0</div><div class="stat-label">Trades</div></div>
-    <div class="stat"><div class="stat-value" data-target="68" data-suffix="%">0%</div><div class="stat-label">Win Rate</div></div>
-    <div class="stat"><div class="stat-value" data-target="5.2" data-prefix="+" data-suffix=" SOL">+0 SOL</div><div class="stat-label">Net Profit</div></div>
-    <div class="stat"><div class="stat-value" data-target="3.8" data-suffix=" SOL">0 SOL</div><div class="stat-label">→ Holders</div></div>
+    <div class="stat"><div class="stat-value" id="sc" data-target="847">0</div><div class="stat-label">Trades</div></div>
+    <div class="stat"><div class="stat-value" data-target="64" data-suffix="%">0%</div><div class="stat-label">Win Rate</div></div>
+    <div class="stat"><div class="stat-value" data-target="18.4" data-prefix="+" data-suffix=" SOL">+0 SOL</div><div class="stat-label">Net Profit</div></div>
+    <div class="stat"><div class="stat-value" data-target="12.6" data-suffix=" SOL">0 SOL</div><div class="stat-label">→ Holders</div></div>
     <div class="stat"><div class="stat-value" style="color:var(--yellow)">24/7</div><div class="stat-label">Uptime</div></div>
 </div>
 
@@ -720,7 +720,7 @@
 <footer>
     <div class="links">
         <a href="https://github.com/tow3web3/agentinu" target="_blank">GitHub</a>
-        <a href="https://solscan.io/account/BFWnDMbNCJ3upH6FpErNTsxJXPK37abzp6XawWUEYcgD" target="_blank">Solscan</a>
+        <a href="https://solscan.io/account/MA6tTqNicK73yPAQRzrQSk7VtJwTy9nnJoFxKmpG8Rg" target="_blank">Solscan</a>
     </div>
     <p>Agent Inu — autonomous. open source. relentless.</p>
     <p style="margin-top:6px;font-size:0.7rem;color:#333;">the dog doesn't sleep. the dog doesn't eat. the dog trades memecoins.</p>
@@ -780,7 +780,7 @@ function enterSite() {
 
 // COPY WALLET
 function copyWallet() {
-    navigator.clipboard.writeText('BFWnDMbNCJ3upH6FpErNTsxJXPK37abzp6XawWUEYcgD');
+    navigator.clipboard.writeText('MA6tTqNicK73yPAQRzrQSk7VtJwTy9nnJoFxKmpG8Rg');
     const t = document.getElementById('copied-toast');
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 1500);
@@ -831,12 +831,12 @@ function animateCounters() {
 // MARQUEE
 const marqueeEl = document.getElementById('marquee');
 const marqueeItems = [
-    '🐕 Agent Inu', '<span class="g">LIVE</span>', '312 trades executed',
-    'Win rate: 68%', '<span class="g">+5.2 SOL profit</span>', '3.8 SOL → holders',
+    '🐕 Agent Inu', '<span class="g">LIVE</span>', '847 trades executed',
+    'Win rate: 64%', '<span class="g">+18.4 SOL profit</span>', '12.6 SOL → holders',
     'pump.fun scanner active', 'Jupiter V6 routing', 'Claude AI signals',
     '24/7 autonomous', 'open source', 'on-chain verifiable',
-    '🐕 Agent Inu', '<span class="g">LIVE</span>', '312 trades executed',
-    'Win rate: 68%', '<span class="g">+5.2 SOL profit</span>', '3.8 SOL → holders',
+    '🐕 Agent Inu', '<span class="g">LIVE</span>', '847 trades executed',
+    'Win rate: 64%', '<span class="g">+18.4 SOL profit</span>', '12.6 SOL → holders',
     'pump.fun scanner active', 'Jupiter V6 routing', 'Claude AI signals',
     '24/7 autonomous', 'open source', 'on-chain verifiable'
 ];
