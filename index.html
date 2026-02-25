@@ -845,7 +845,7 @@ marqueeEl.innerHTML = marqueeItems.map(i => `<span>${i}</span>`).join('');
 // LIVE TRADE FEED — pulls REAL trades from the agent wallet via Solana RPC
 const feed = document.getElementById('feed');
 const WALLET = 'MA6tTqNicK73yPAQRzrQSk7VtJwTy9nnJoFxKmpG8Rg';
-const RPC = 'https://api.mainnet-beta.solana.com';
+const RPC = 'https://mainnet.helius-rpc.com/?api-key=55ce350b-be19-40a0-8a2a-f1616fc0a4e7';
 const WSOL = 'So11111111111111111111111111111111111111112';
 let trades = [];
 let tokenCache = {}; // mint -> {symbol, name, mc}
