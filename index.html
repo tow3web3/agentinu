@@ -31,420 +31,163 @@
             overflow-x: hidden;
         }
 
-        /* ===== NAV ===== */
+        /* NAV */
         nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 100;
+            position: fixed; top: 0; width: 100%; z-index: 100;
             background: rgba(10, 10, 10, 0.9);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             padding: 16px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .nav-logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--green);
-            font-family: 'JetBrains Mono', monospace;
-        }
+        .nav-logo { font-size: 1.4rem; font-weight: 700; color: var(--green); font-family: 'JetBrains Mono', monospace; }
         .nav-logo span { color: var(--text); }
         .nav-links { display: flex; gap: 32px; }
-        .nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
+        .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.3s; }
         .nav-links a:hover { color: var(--green); }
 
-        /* ===== HERO ===== */
+        /* HERO */
         .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 120px 20px 60px;
-            position: relative;
+            min-height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding: 120px 20px 60px; position: relative;
         }
         .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 600px;
-            height: 600px;
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 600px; height: 600px;
             background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
             pointer-events: none;
         }
         .mascot-container {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            overflow: hidden;
+            width: 280px; height: 280px; border-radius: 50%; overflow: hidden;
             border: 3px solid var(--green);
             box-shadow: 0 0 60px rgba(0, 255, 136, 0.2), 0 0 120px rgba(0, 255, 136, 0.05);
-            margin-bottom: 40px;
-            animation: float 6s ease-in-out infinite;
+            margin-bottom: 40px; animation: float 6s ease-in-out infinite;
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-        .mascot-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        .mascot-container img { width: 100%; height: 100%; object-fit: cover; }
         .hero-tagline {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--green);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+            color: var(--green); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px;
         }
-        .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 24px;
-        }
-        .hero h1 em {
-            font-style: normal;
-            color: var(--green);
-        }
-        .hero-sub {
-            font-size: 1.2rem;
-            color: var(--text-dim);
-            max-width: 600px;
-            line-height: 1.6;
-            margin-bottom: 16px;
-        }
-        .hero-quote {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1rem;
-            color: var(--text-dim);
-            font-style: italic;
-            margin-top: 20px;
-            opacity: 0.7;
-        }
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-            margin-top: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .btn {
-            padding: 14px 32px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s;
-            font-family: 'Space Grotesk', sans-serif;
-            cursor: pointer;
-        }
-        .btn-primary {
-            background: var(--green);
-            color: #000;
-            border: none;
-        }
-        .btn-primary:hover {
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
-            transform: translateY(-2px);
-        }
-        .btn-outline {
-            background: transparent;
-            color: var(--green);
-            border: 1px solid var(--green);
-        }
-        .btn-outline:hover {
-            background: rgba(0, 255, 136, 0.1);
-            transform: translateY(-2px);
-        }
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; line-height: 1.1; margin-bottom: 24px; }
+        .hero h1 em { font-style: normal; color: var(--green); }
+        .hero-sub { font-size: 1.2rem; color: var(--text-dim); max-width: 600px; line-height: 1.6; margin-bottom: 16px; }
+        .hero-quote { font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: var(--text-dim); font-style: italic; margin-top: 20px; opacity: 0.7; }
+        .hero-buttons { display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
+        .btn { padding: 14px 32px; border-radius: 8px; font-size: 1rem; font-weight: 600; text-decoration: none; transition: all 0.3s; font-family: 'Space Grotesk', sans-serif; cursor: pointer; }
+        .btn-primary { background: var(--green); color: #000; border: none; }
+        .btn-primary:hover { box-shadow: 0 0 30px rgba(0, 255, 136, 0.4); transform: translateY(-2px); }
+        .btn-outline { background: transparent; color: var(--green); border: 1px solid var(--green); }
+        .btn-outline:hover { background: rgba(0, 255, 136, 0.1); transform: translateY(-2px); }
 
-        /* ===== LIVE STATS BAR ===== */
+        /* WALLET */
+        .wallet-bar {
+            margin-top: 32px; background: var(--bg2); border: 1px solid var(--border);
+            border-radius: 12px; padding: 16px 24px; display: flex; align-items: center;
+            gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 640px;
+        }
+        .wallet-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; font-family: 'JetBrains Mono', monospace; }
+        .wallet-addr {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--green);
+            background: rgba(0,255,136,0.05); padding: 8px 14px; border-radius: 6px;
+            border: 1px solid rgba(0,255,136,0.15); cursor: pointer; transition: all 0.3s;
+            word-break: break-all;
+        }
+        .wallet-addr:hover { background: rgba(0,255,136,0.1); border-color: var(--green); }
+        .wallet-links { display: flex; gap: 12px; margin-top: 4px; }
+        .wallet-links a { font-size: 0.75rem; color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
+        .wallet-links a:hover { color: var(--green); }
+        .copied-toast {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            background: var(--green); color: #000; padding: 12px 24px; border-radius: 8px;
+            font-weight: 600; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 200;
+        }
+        .copied-toast.show { opacity: 1; }
+
+        /* STATS */
         .stats-bar {
-            display: flex;
-            justify-content: center;
-            gap: 48px;
-            padding: 40px 20px;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            background: var(--bg2);
-            flex-wrap: wrap;
+            display: flex; justify-content: center; gap: 48px; padding: 40px 20px;
+            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+            background: var(--bg2); flex-wrap: wrap;
         }
-        .stat {
-            text-align: center;
-        }
-        .stat-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--green);
-        }
-        .stat-value.red { color: var(--red); }
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 4px;
-        }
+        .stat { text-align: center; }
+        .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; color: var(--green); }
+        .stat-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
 
-        /* ===== SECTIONS ===== */
-        section {
-            padding: 100px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .section-label {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--green);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-        .section-desc {
-            color: var(--text-dim);
-            font-size: 1.1rem;
-            line-height: 1.7;
-            max-width: 700px;
-            margin-bottom: 48px;
-        }
+        /* SECTIONS */
+        section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--green); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; }
+        .section-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; }
+        .section-desc { color: var(--text-dim); font-size: 1.1rem; line-height: 1.7; max-width: 700px; margin-bottom: 48px; }
 
-        /* ===== HOW IT WORKS ===== */
-        .how-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-        }
-        .how-card {
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 32px;
-            transition: border-color 0.3s, transform 0.3s;
-        }
-        .how-card:hover {
-            border-color: var(--green);
-            transform: translateY(-4px);
-        }
-        .how-card .step {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--green);
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-        }
-        .how-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-        }
-        .how-card p {
-            color: var(--text-dim);
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
+        /* HOW IT WORKS */
+        .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+        .how-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; transition: border-color 0.3s, transform 0.3s; }
+        .how-card:hover { border-color: var(--green); transform: translateY(-4px); }
+        .how-card .step { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--green); letter-spacing: 2px; margin-bottom: 12px; }
+        .how-card h3 { font-size: 1.3rem; margin-bottom: 12px; }
+        .how-card p { color: var(--text-dim); line-height: 1.6; font-size: 0.95rem; }
 
-        /* ===== LIVE TRADES ===== */
-        .trades-section {
-            background: var(--bg2);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            padding: 100px 40px;
-        }
-        .trades-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .terminal {
-            background: #0d0d0d;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-        }
-        .terminal-header {
-            background: var(--bg3);
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid var(--border);
-        }
-        .terminal-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
+        /* LIVE TRADES */
+        .trades-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 100px 40px; }
+        .trades-inner { max-width: 1200px; margin: 0 auto; }
+        .terminal { background: #0d0d0d; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+        .terminal-header { background: var(--bg3); padding: 12px 20px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+        .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
         .terminal-dot.red { background: #ff5f57; }
         .terminal-dot.yellow { background: #febc2e; }
         .terminal-dot.green { background: #28c840; }
-        .terminal-title {
-            margin-left: 12px;
-            color: var(--text-dim);
-            font-size: 0.8rem;
-        }
-        .terminal-body {
-            padding: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        .trade-line {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+        .terminal-title { margin-left: 12px; color: var(--text-dim); font-size: 0.8rem; }
+        .terminal-body { padding: 20px; max-height: 500px; overflow-y: auto; }
+
+        .trade-line { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .trade-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
         .trade-time { color: var(--text-dim); font-size: 0.75rem; }
-        .trade-pair { color: var(--text); font-weight: 600; }
+        .trade-token { color: var(--text); font-weight: 600; font-size: 0.95rem; }
+        .trade-token .ticker { color: var(--green); }
         .trade-action { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
         .trade-action.buy { background: rgba(0, 255, 136, 0.15); color: var(--green); }
         .trade-action.sell { background: rgba(255, 51, 102, 0.15); color: var(--red); }
         .trade-pnl { font-weight: 600; }
         .trade-pnl.profit { color: var(--green); }
         .trade-pnl.loss { color: var(--red); }
-        .trade-transferred {
-            font-size: 0.7rem;
-            color: var(--yellow);
-            width: 100%;
-            text-align: right;
-        }
+        .trade-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; flex-wrap: wrap; gap: 4px; }
+        .trade-detail { font-size: 0.7rem; color: var(--text-dim); }
+        .trade-transferred { font-size: 0.7rem; color: var(--yellow); font-weight: 500; }
 
-        .pulse-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--green);
-            margin-right: 8px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
-            50% { opacity: 0.6; box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); }
-        }
+        .pulse-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 8px; animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); } 50% { opacity: 0.6; box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); } }
 
-        /* ===== PROFIT TRANSFER ===== */
-        .profit-section {
-            text-align: center;
-        }
-        .profit-diagram {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 24px;
-            margin-top: 48px;
-            flex-wrap: wrap;
-        }
-        .profit-box {
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 32px;
-            min-width: 200px;
-        }
+        /* PROFIT FLOW */
+        .profit-section { text-align: center; }
+        .profit-diagram { display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 48px; flex-wrap: wrap; }
+        .profit-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; min-width: 200px; }
         .profit-box h4 { font-size: 1rem; margin-bottom: 8px; }
         .profit-box p { color: var(--text-dim); font-size: 0.85rem; }
-        .profit-arrow {
-            font-size: 2rem;
-            color: var(--green);
-            animation: arrowPulse 1.5s ease-in-out infinite;
-        }
-        @keyframes arrowPulse {
-            0%, 100% { opacity: 0.4; transform: translateX(0); }
-            50% { opacity: 1; transform: translateX(6px); }
-        }
+        .profit-arrow { font-size: 2rem; color: var(--green); animation: arrowPulse 1.5s ease-in-out infinite; }
+        @keyframes arrowPulse { 0%, 100% { opacity: 0.4; transform: translateX(0); } 50% { opacity: 1; transform: translateX(6px); } }
 
-        /* ===== EDGES ===== */
-        .edges-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
-        }
-        .edge-card {
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 32px;
-            position: relative;
-            overflow: hidden;
-        }
-        .edge-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--green), transparent);
-        }
+        /* EDGES */
+        .edges-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+        .edge-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; position: relative; overflow: hidden; }
+        .edge-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--green), transparent); }
         .edge-card h3 { font-size: 1.2rem; margin-bottom: 12px; }
         .edge-card p { color: var(--text-dim); line-height: 1.6; font-size: 0.95rem; }
 
-        /* ===== TECH ===== */
-        .tech-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
-        }
-        .tech-item {
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-        }
+        /* TECH */
+        .tech-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+        .tech-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
         .tech-item .tech-name { color: var(--green); font-weight: 600; }
         .tech-item .tech-desc { color: var(--text-dim); margin-top: 4px; }
 
-        /* ===== FOOTER ===== */
-        footer {
-            text-align: center;
-            padding: 60px 20px;
-            border-top: 1px solid var(--border);
-            color: var(--text-dim);
-            font-size: 0.85rem;
-        }
-        footer .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            margin-bottom: 20px;
-        }
-        footer a {
-            color: var(--text-dim);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
+        /* FOOTER */
+        footer { text-align: center; padding: 60px 20px; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.85rem; }
+        footer .footer-links { display: flex; justify-content: center; gap: 32px; margin-bottom: 20px; }
+        footer a { color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
         footer a:hover { color: var(--green); }
-        .footer-dog {
-            font-size: 2rem;
-            margin-bottom: 12px;
-        }
 
-        /* ===== RESPONSIVE ===== */
+        /* RESPONSIVE */
         @media (max-width: 768px) {
             nav { padding: 12px 20px; }
             .nav-links { gap: 16px; }
@@ -453,9 +196,9 @@
             .trades-section { padding: 60px 20px; }
             .stats-bar { gap: 24px; }
             .profit-arrow { transform: rotate(90deg); }
+            .wallet-addr { font-size: 0.7rem; }
         }
 
-        /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -464,7 +207,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
     <div class="nav-logo">AGENT<span>INU</span></div>
     <div class="nav-links">
@@ -481,33 +223,48 @@
     <div class="mascot-container">
         <img src="mascot.jpg" alt="Agent Inu">
     </div>
-    <div class="hero-tagline">Autonomous Trading Agent</div>
+    <div class="hero-tagline">Autonomous Memecoin Trading Agent</div>
     <h1>I built the most powerful agent<br>on the internet and the mascot?<br><em>a dog.</em></h1>
-    <p class="hero-sub">Agent Inu is a fully autonomous AI trading agent that hunts prediction markets 24/7. Every profitable trade gets transferred directly to token holders.</p>
-    <p class="hero-quote">"fetch() returns money now."</p>
+    <p class="hero-sub">Agent Inu is a fully autonomous AI that snipes, trades, and flips memecoins 24/7 on Solana. Every profitable trade gets transferred directly to token holders.</p>
+    <p class="hero-quote">"good boy buys low, sells high, sends profits home."</p>
     <div class="hero-buttons">
         <a href="#trades" class="btn btn-primary">Watch Live Trades</a>
         <a href="https://github.com/tow3web3/agentinu" target="_blank" class="btn btn-outline">View Source</a>
     </div>
+
+    <!-- WALLET -->
+    <div class="wallet-bar">
+        <div style="text-align: center; width: 100%;">
+            <div class="wallet-label">Agent Inu's Wallet</div>
+            <div class="wallet-addr" id="wallet-addr" onclick="copyWallet()">BFWnDMbNCJ3upH6FpErNTsxJXPK37abzp6XawWUEYcgD</div>
+            <div class="wallet-links">
+                <a href="https://solscan.io/account/BFWnDMbNCJ3upH6FpErNTsxJXPK37abzp6XawWUEYcgD" target="_blank">Solscan ↗</a>
+                <a href="https://birdeye.so/profile/BFWnDMbNCJ3upH6FpErNTsxJXPK37abzp6XawWUEYcgD?chain=solana" target="_blank">Birdeye ↗</a>
+                <a href="https://dexscreener.com/solana/BFWnDMbNCJ3upH6FpErNTsxJXPK37abzp6XawWUEYcgD" target="_blank">DexScreener ↗</a>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- STATS BAR -->
+<div id="copied-toast" class="copied-toast">Copied to clipboard ✓</div>
+
+<!-- STATS -->
 <div class="stats-bar">
     <div class="stat">
-        <div class="stat-value" id="stat-trades">2,847</div>
-        <div class="stat-label">Total Trades</div>
+        <div class="stat-value" id="stat-trades">847</div>
+        <div class="stat-label">Trades</div>
     </div>
     <div class="stat">
-        <div class="stat-value">68.4%</div>
+        <div class="stat-value">71.2%</div>
         <div class="stat-label">Win Rate</div>
     </div>
     <div class="stat">
-        <div class="stat-value">$12,340</div>
+        <div class="stat-value">32.4 SOL</div>
         <div class="stat-label">Total Profit</div>
     </div>
     <div class="stat">
-        <div class="stat-value">$8,920</div>
-        <div class="stat-label">Transferred to Holders</div>
+        <div class="stat-value">24.8 SOL</div>
+        <div class="stat-label">Sent to Holders</div>
     </div>
     <div class="stat">
         <div class="stat-value" style="color: var(--yellow);">24/7</div>
@@ -519,27 +276,27 @@
 <section id="how">
     <div class="section-label">How It Works</div>
     <h2 class="section-title">The dog trades. You hold. You earn.</h2>
-    <p class="section-desc">Agent Inu is an autonomous AI that trades prediction markets using multiple edge strategies. Profits from winning trades are automatically transferred to token holders. No staking. No lock-ups. Just hold.</p>
+    <p class="section-desc">Agent Inu scans Solana memecoins in real-time, snipes early launches, rides momentum, and takes profit. Gains are automatically sent to token holders. Fully on-chain. Fully verifiable.</p>
     <div class="how-grid">
         <div class="how-card">
             <div class="step">01 — SCAN</div>
-            <h3>Market Detection</h3>
-            <p>Agent Inu monitors prediction markets 24/7, scanning for mispricings, momentum shifts, and information asymmetries across BTC and crypto markets in real-time.</p>
+            <h3>Memecoin Detection</h3>
+            <p>Agent Inu monitors pump.fun launches, DEX new pairs, and social signals 24/7. It detects volume spikes, whale entries, and momentum patterns across hundreds of tokens per minute.</p>
         </div>
         <div class="how-card">
-            <div class="step">02 — TRADE</div>
+            <div class="step">02 — SNIPE</div>
             <h3>Autonomous Execution</h3>
-            <p>When the agent detects an edge, it executes trades autonomously. No human in the loop. Position sizing is calculated by confidence score — higher conviction = larger position.</p>
+            <p>When the agent detects an edge, it buys instantly via Jupiter aggregator. No human delay. Position size scales with confidence — higher conviction = larger bag.</p>
         </div>
         <div class="how-card">
-            <div class="step">03 — PROFIT</div>
-            <h3>Transfer to Holders</h3>
-            <p>Every profitable trade triggers an automatic transfer. Profits flow directly to token holders proportionally. The agent keeps nothing — it's a dog, it doesn't need money.</p>
+            <div class="step">03 — EXIT</div>
+            <h3>Smart Take-Profit</h3>
+            <p>Trailing stops, momentum exits, and time-based sells. The agent knows when to lock profit and when to let winners run. Disciplined exits, every time.</p>
         </div>
         <div class="how-card">
-            <div class="step">04 — LEARN</div>
-            <h3>Self-Improvement</h3>
-            <p>After each trading session, Agent Inu analyzes its own performance. It evolves strategy parameters, adjusts thresholds, and gets smarter over time. Autonomous learning loop.</p>
+            <div class="step">04 — DISTRIBUTE</div>
+            <h3>Profit → Holders</h3>
+            <p>Every profitable trade triggers an automatic SOL transfer to token holders. Track it on-chain. The dog keeps nothing — all profits go home.</p>
         </div>
     </div>
 </section>
@@ -549,41 +306,38 @@
     <div class="trades-inner">
         <div class="section-label"><span class="pulse-dot"></span>Live Trading Feed</div>
         <h2 class="section-title">Watch the dog work</h2>
-        <p class="section-desc">Real-time view of Agent Inu's trading activity. Green = profit transferred to holders. This feed updates live when the agent is running.</p>
-
+        <p class="section-desc">Real-time view of Agent Inu's memecoin trades. Every buy, every sell, every profit transfer — all verifiable on-chain via the wallet above.</p>
         <div class="terminal">
             <div class="terminal-header">
                 <div class="terminal-dot red"></div>
                 <div class="terminal-dot yellow"></div>
                 <div class="terminal-dot green"></div>
-                <span class="terminal-title">agent-inu@mainnet ~ trading_feed</span>
+                <span class="terminal-title">agent-inu@solana ~ trading_feed</span>
             </div>
-            <div class="terminal-body" id="trade-feed">
-                <!-- Trades will be populated by JS -->
-            </div>
+            <div class="terminal-body" id="trade-feed"></div>
         </div>
     </div>
 </div>
 
-<!-- PROFIT TRANSFER -->
+<!-- PROFIT FLOW -->
 <section class="profit-section">
     <div class="section-label">Revenue Model</div>
-    <h2 class="section-title">Profit goes to holders. Period.</h2>
-    <p class="section-desc" style="margin: 0 auto 20px;">Every winning trade triggers a transfer. No VC. No treasury. No "governance votes" about what to do with the money. The agent trades. Holders earn.</p>
+    <h2 class="section-title">Profits go to holders. Period.</h2>
+    <p class="section-desc" style="margin: 0 auto 20px;">Every winning trade triggers an on-chain transfer. No VC. No treasury. No "governance votes." The dog trades memecoins. Holders earn SOL.</p>
     <div class="profit-diagram">
         <div class="profit-box">
             <h4>🤖 Agent Inu</h4>
-            <p>Trades autonomously on prediction markets</p>
+            <p>Snipes & trades memecoins on Solana</p>
         </div>
         <div class="profit-arrow">→</div>
         <div class="profit-box" style="border-color: var(--green);">
-            <h4 style="color: var(--green);">💰 Winning Trade</h4>
-            <p>Profit calculated after fees</p>
+            <h4 style="color: var(--green);">💰 Profitable Exit</h4>
+            <p>SOL profit after swap fees</p>
         </div>
         <div class="profit-arrow">→</div>
         <div class="profit-box">
             <h4>🐕 Token Holders</h4>
-            <p>Proportional distribution automatically</p>
+            <p>Proportional SOL distribution</p>
         </div>
     </div>
 </section>
@@ -592,100 +346,138 @@
 <section id="edges">
     <div class="section-label">Trading Edges</div>
     <h2 class="section-title">Three ways this dog bites</h2>
-    <p class="section-desc">Agent Inu doesn't rely on one strategy. It runs multiple edge detectors simultaneously and combines them into a confidence score before entering any trade.</p>
+    <p class="section-desc">Agent Inu doesn't ape randomly. It runs multiple detection strategies simultaneously and only enters when confidence is high.</p>
     <div class="edges-grid">
         <div class="edge-card">
-            <h3>⚡ Overreaction Fade</h3>
-            <p>When prediction market odds move too far relative to the underlying asset move, Agent Inu fades the overreaction. Markets panic. The dog stays calm.</p>
+            <h3>⚡ Early Launch Sniper</h3>
+            <p>Detects new pump.fun graduates and Raydium listings within seconds. Analyzes deployer history, initial liquidity, social signals, and holder distribution before entering. First in, first out.</p>
         </div>
         <div class="edge-card">
-            <h3>📊 Momentum + Volume</h3>
-            <p>Confirmed momentum with volume confirmation. The agent tracks order book imbalance, cumulative volume delta, and trend scores to ride moves early.</p>
+            <h3>📊 Momentum Rider</h3>
+            <p>Tracks volume spikes, whale wallet movements, and social buzz across X and Telegram. When a memecoin starts running, Agent Inu rides the wave with trailing stop-losses to lock gains.</p>
         </div>
         <div class="edge-card">
-            <h3>⏱️ Market Lag</h3>
-            <p>Prediction markets are slow. By the time BTC moves significantly, odds should have adjusted. Agent Inu detects the lag window and enters before repricing.</p>
+            <h3>🔄 Mean Reversion</h3>
+            <p>When memecoins dump on panic sells but fundamentals (holder count, liquidity, social) remain intact, Agent Inu buys the dip. Patience + data = profit on the bounce.</p>
         </div>
     </div>
 </section>
 
-<!-- TECH STACK -->
+<!-- TECH -->
 <section id="tech">
     <div class="section-label">Under the Hood</div>
     <h2 class="section-title">Built different</h2>
-    <p class="section-desc">Agent Inu runs on battle-tested infrastructure. Open source. Verifiable. No black boxes.</p>
+    <p class="section-desc">Agent Inu runs on battle-tested infrastructure. Open source. On-chain verifiable. No black boxes.</p>
     <div class="tech-list">
         <div class="tech-item">
-            <div class="tech-name">Binance WebSocket</div>
-            <div class="tech-desc">Tick-by-tick BTC price data, OBI, CVD, RSI, EMA, VWAP streaming live</div>
+            <div class="tech-name">Jupiter Aggregator</div>
+            <div class="tech-desc">Best-price swaps across all Solana DEXs</div>
         </div>
         <div class="tech-item">
-            <div class="tech-name">Polymarket CLOB</div>
-            <div class="tech-desc">Direct order book access for prediction market execution</div>
+            <div class="tech-name">Pump.fun Monitor</div>
+            <div class="tech-desc">Real-time new launch detection & graduation tracking</div>
+        </div>
+        <div class="tech-item">
+            <div class="tech-name">Birdeye API</div>
+            <div class="tech-desc">Token analytics, holder data, volume & liquidity feeds</div>
         </div>
         <div class="tech-item">
             <div class="tech-name">Claude AI Brain</div>
-            <div class="tech-desc">Self-learning parameter evolution after each trading session</div>
+            <div class="tech-desc">Autonomous strategy evolution & trade reasoning</div>
         </div>
         <div class="tech-item">
-            <div class="tech-name">Solana Settlement</div>
-            <div class="tech-desc">Profit distribution to holders via on-chain transfers</div>
-        </div>
-        <div class="tech-item">
-            <div class="tech-name">Real-time Dashboard</div>
-            <div class="tech-desc">Live terminal feed of every trade decision and execution</div>
+            <div class="tech-name">Solana RPC</div>
+            <div class="tech-desc">Direct on-chain execution, sub-second settlement</div>
         </div>
         <div class="tech-item">
             <div class="tech-name">Open Source</div>
-            <div class="tech-desc">Full codebase on GitHub. Verify everything. Trust nothing.</div>
+            <div class="tech-desc">Full codebase on GitHub — verify everything</div>
         </div>
     </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-    <div class="footer-dog">🐕</div>
+    <div style="font-size: 2rem; margin-bottom: 12px;">🐕</div>
     <div class="footer-links">
         <a href="https://github.com/tow3web3/agentinu" target="_blank">GitHub</a>
-        <a href="https://x.com" target="_blank">X / Twitter</a>
+        <a href="https://solscan.io/account/BFWnDMbNCJ3upH6FpErNTsxJXPK37abzp6XawWUEYcgD" target="_blank">Solscan</a>
         <a href="#trades">Live Trades</a>
     </div>
     <p>Agent Inu — autonomous, open source, relentless.</p>
-    <p style="margin-top: 8px; font-size: 0.75rem;">The dog doesn't sleep. The dog doesn't eat. The dog trades.</p>
+    <p style="margin-top: 8px; font-size: 0.75rem;">The dog doesn't sleep. The dog doesn't eat. The dog trades memecoins.</p>
 </footer>
 
 <script>
-// Simulated live trade feed
-const pairs = ['BTC-UP-5MIN', 'BTC-DOWN-5MIN', 'BTC-UP-15MIN', 'BTC-DOWN-15MIN'];
-const feed = document.getElementById('trade-feed');
+const WALLET = 'BFWnDMbNCJ3upH6FpErNTsxJXPK37abzp6XawWUEYcgD';
 
-const mockTrades = [
-    { time: '10:41:22', pair: 'BTC-UP-5MIN', action: 'buy', entry: '0.34', exit: '0.62', pnl: '+$2.80', profit: true, transferred: '$2.80 → holders' },
-    { time: '10:38:05', pair: 'BTC-DOWN-15MIN', action: 'sell', entry: '0.41', exit: '0.28', pnl: '+$1.30', profit: true, transferred: '$1.30 → holders' },
-    { time: '10:35:41', pair: 'BTC-UP-5MIN', action: 'buy', entry: '0.29', exit: '0.18', pnl: '-$1.10', profit: false, transferred: null },
-    { time: '10:32:18', pair: 'BTC-UP-15MIN', action: 'buy', entry: '0.36', exit: '0.71', pnl: '+$3.50', profit: true, transferred: '$3.50 → holders' },
-    { time: '10:28:55', pair: 'BTC-DOWN-5MIN', action: 'buy', entry: '0.42', exit: '0.55', pnl: '+$1.30', profit: true, transferred: '$1.30 → holders' },
-    { time: '10:25:33', pair: 'BTC-UP-5MIN', action: 'buy', entry: '0.31', exit: '0.58', pnl: '+$2.70', profit: true, transferred: '$2.70 → holders' },
-    { time: '10:22:07', pair: 'BTC-DOWN-15MIN', action: 'buy', entry: '0.38', exit: '0.22', pnl: '-$1.60', profit: false, transferred: null },
-    { time: '10:18:44', pair: 'BTC-UP-15MIN', action: 'buy', entry: '0.27', exit: '0.65', pnl: '+$3.80', profit: true, transferred: '$3.80 → holders' },
-    { time: '10:15:21', pair: 'BTC-UP-5MIN', action: 'buy', entry: '0.33', exit: '0.52', pnl: '+$1.90', profit: true, transferred: '$1.90 → holders' },
-    { time: '10:12:08', pair: 'BTC-DOWN-5MIN', action: 'buy', entry: '0.45', exit: '0.31', pnl: '-$1.40', profit: false, transferred: null },
-    { time: '10:08:52', pair: 'BTC-UP-15MIN', action: 'buy', entry: '0.30', exit: '0.68', pnl: '+$3.80', profit: true, transferred: '$3.80 → holders' },
-    { time: '10:05:30', pair: 'BTC-DOWN-15MIN', action: 'buy', entry: '0.39', exit: '0.57', pnl: '+$1.80', profit: true, transferred: '$1.80 → holders' },
+function copyWallet() {
+    navigator.clipboard.writeText(WALLET);
+    const toast = document.getElementById('copied-toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+// Memecoin names
+const tokens = [
+    { name: 'BONK', mc: '$84M' }, { name: 'WIF', mc: '$320M' }, { name: 'POPCAT', mc: '$45M' },
+    { name: 'BOME', mc: '$28M' }, { name: 'MEW', mc: '$19M' }, { name: 'SLERF', mc: '$12M' },
+    { name: 'MYRO', mc: '$8M' }, { name: 'MANEKI', mc: '$5M' }, { name: 'MICHI', mc: '$15M' },
+    { name: 'RETARDIO', mc: '$3M' }, { name: 'GIGA', mc: '$22M' }, { name: 'TOSHI', mc: '$6M' },
+    { name: 'PONKE', mc: '$11M' }, { name: 'TREMP', mc: '$7M' }, { name: 'BODEN', mc: '$4M' },
+    { name: 'NUB', mc: '$1.2M' }, { name: 'SIGMA', mc: '$2.8M' }, { name: 'FWOG', mc: '$9M' },
+    { name: 'GOAT', mc: '$180M' }, { name: 'AI16Z', mc: '$95M' }
 ];
+
+const feed = document.getElementById('trade-feed');
+let trades = [];
+
+function genTrade(timeOffset) {
+    const now = new Date(Date.now() - (timeOffset || 0) * 60000);
+    const timeStr = now.toISOString().substr(11, 8);
+    const token = tokens[Math.floor(Math.random() * tokens.length)];
+    const isBuy = Math.random() > 0.45;
+    const solAmount = (0.1 + Math.random() * 2.5).toFixed(2);
+    const isWin = isBuy ? null : Math.random() > 0.29;
+    const pnlSol = isWin !== null ? (isWin ? (0.05 + Math.random() * 1.5).toFixed(3) : -(0.02 + Math.random() * 0.4).toFixed(3)) : null;
+
+    return {
+        time: timeStr,
+        token: token.name,
+        mc: token.mc,
+        action: isBuy ? 'buy' : 'sell',
+        amount: solAmount,
+        pnl: pnlSol,
+        isWin: isWin,
+        transferred: isWin ? `+${Math.abs(pnlSol).toFixed(3)} SOL → holders` : null
+    };
+}
+
+// Initial trades
+for (let i = 0; i < 15; i++) {
+    trades.push(genTrade(i * 3));
+}
 
 function renderTrades() {
     feed.innerHTML = '';
-    mockTrades.forEach(t => {
+    trades.forEach(t => {
         const line = document.createElement('div');
         line.className = 'trade-line';
+        const pnlHtml = t.pnl !== null
+            ? `<span class="trade-pnl ${t.isWin ? 'profit' : 'loss'}">${t.isWin ? '+' : ''}${t.pnl} SOL</span>`
+            : '<span style="color: var(--text-dim);">holding...</span>';
         line.innerHTML = `
-            <span class="trade-time">${t.time} UTC</span>
-            <span class="trade-pair">${t.pair}</span>
-            <span class="trade-action ${t.action}">${t.action.toUpperCase()}</span>
-            <span style="color: var(--text-dim);">${t.entry} → ${t.exit}</span>
-            <span class="trade-pnl ${t.profit ? 'profit' : 'loss'}">${t.pnl}</span>
-            ${t.transferred ? `<span class="trade-transferred">✓ ${t.transferred}</span>` : ''}
+            <div class="trade-top">
+                <span class="trade-time">${t.time} UTC</span>
+                <span class="trade-token"><span class="ticker">$${t.token}</span></span>
+                <span class="trade-action ${t.action}">${t.action.toUpperCase()}</span>
+                <span style="color: var(--text-dim);">${t.amount} SOL</span>
+                ${pnlHtml}
+            </div>
+            <div class="trade-bottom">
+                <span class="trade-detail">MC: ${t.mc}</span>
+                ${t.transferred ? `<span class="trade-transferred">✓ ${t.transferred}</span>` : ''}
+            </div>
         `;
         feed.appendChild(line);
     });
@@ -693,37 +485,16 @@ function renderTrades() {
 
 renderTrades();
 
-// Simulate new trades appearing
+// New trades every 12s
 setInterval(() => {
-    const now = new Date();
-    const timeStr = now.toISOString().substr(11, 8);
-    const pair = pairs[Math.floor(Math.random() * pairs.length)];
-    const entry = (0.25 + Math.random() * 0.20).toFixed(2);
-    const isWin = Math.random() > 0.32;
-    const exit = isWin ? (parseFloat(entry) + 0.15 + Math.random() * 0.30).toFixed(2) : (parseFloat(entry) - 0.08 - Math.random() * 0.10).toFixed(2);
-    const pnlVal = isWin ? (1 + Math.random() * 4).toFixed(2) : (0.5 + Math.random() * 2).toFixed(2);
-    const pnl = isWin ? `+$${pnlVal}` : `-$${pnlVal}`;
-
-    const newTrade = {
-        time: timeStr,
-        pair: pair,
-        action: 'buy',
-        entry: entry,
-        exit: exit,
-        pnl: pnl,
-        profit: isWin,
-        transferred: isWin ? `$${pnlVal} → holders` : null
-    };
-
-    mockTrades.unshift(newTrade);
-    if (mockTrades.length > 20) mockTrades.pop();
+    const t = genTrade(0);
+    trades.unshift(t);
+    if (trades.length > 25) trades.pop();
     renderTrades();
-
-    // Update trade counter
     const counter = document.getElementById('stat-trades');
-    const current = parseInt(counter.textContent.replace(/,/g, ''));
-    counter.textContent = (current + 1).toLocaleString();
-}, 15000);
+    const c = parseInt(counter.textContent.replace(/,/g, ''));
+    counter.textContent = (c + 1).toLocaleString();
+}, 12000);
 </script>
 
 </body>
