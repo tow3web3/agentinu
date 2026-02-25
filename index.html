@@ -842,96 +842,145 @@ const marqueeItems = [
 ];
 marqueeEl.innerHTML = marqueeItems.map(i => `<span>${i}</span>`).join('');
 
-// LIVE TRADE FEED
+// LIVE TRADE FEED — pulls REAL trades from the agent wallet via Solana RPC
 const feed = document.getElementById('feed');
+const WALLET = 'MA6tTqNicK73yPAQRzrQSk7VtJwTy9nnJoFxKmpG8Rg';
+const RPC = 'https://api.mainnet-beta.solana.com';
+const WSOL = 'So11111111111111111111111111111111111111112';
 let trades = [];
-let realTokens = [];
+let tokenCache = {}; // mint -> {symbol, name, mc}
 
-async function fetchTokens() {
+async function rpc(method, params) {
+    const r = await fetch(RPC, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({jsonrpc:'2.0',id:1,method,params})
+    });
+    const d = await r.json();
+    return d.result;
+}
+
+async function getTokenInfo(mint) {
+    if (tokenCache[mint]) return tokenCache[mint];
     try {
-        const r = await fetch('https://api.dexscreener.com/token-profiles/latest/v1');
-        const data = await r.json();
-        realTokens = data
-            .filter(t => t.chainId === 'solana' && t.tokenAddress.endsWith('pump'))
-            .slice(0, 30)
-            .map(t => ({ addr: t.tokenAddress, name: t.tokenAddress.slice(0,6).toUpperCase() }));
-        for (let i = 0; i < Math.min(5, realTokens.length); i++) {
-            try {
-                const r2 = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${realTokens[i].addr}`);
-                const d2 = await r2.json();
-                if (d2.pairs && d2.pairs[0]) {
-                    realTokens[i].name = d2.pairs[0].baseToken.symbol;
-                    realTokens[i].mc = d2.pairs[0].fdv;
-                }
-            } catch(e) {}
+        const r = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${mint}`);
+        const d = await r.json();
+        if (d.pairs && d.pairs[0]) {
+            const p = d.pairs[0];
+            tokenCache[mint] = { symbol: p.baseToken.symbol, name: p.baseToken.name, mc: p.fdv };
+            return tokenCache[mint];
         }
-    } catch(e) {
-        realTokens = [
-            {name:'DOGINME',mc:420000},{name:'MOODENG',mc:180000},{name:'BRETT',mc:95000},
-            {name:'GIGA',mc:65000},{name:'FARTCOIN',mc:45000},{name:'GOATSEUS',mc:32000},
-            {name:'PNUT',mc:28000},{name:'LUCE',mc:18000},{name:'POPDOG',mc:12000},
-            {name:'CHILLGUY',mc:8500},{name:'SMOLANA',mc:5200},{name:'GIGABRAIN',mc:3800}
-        ];
-    }
+    } catch(e) {}
+    tokenCache[mint] = { symbol: mint.slice(0,6), name: mint.slice(0,8), mc: null };
+    return tokenCache[mint];
 }
 
 function fmtMc(v) {
-    if (!v) return '$??K';
+    if (!v) return '';
     if (v >= 1e6) return '$' + (v/1e6).toFixed(1) + 'M';
-    return '$' + (v/1e3).toFixed(0) + 'K';
+    if (v >= 1e3) return '$' + (v/1e3).toFixed(0) + 'K';
+    return '$' + v.toFixed(0);
 }
 
-function genTrade(ago) {
-    const now = new Date(Date.now() - (ago||0)*60000);
-    const ts = now.toISOString().substr(11,8);
-    const tok = realTokens.length ? realTokens[Math.floor(Math.random()*realTokens.length)] : {name:'UNKNOWN',mc:10000};
-    const isBuy = Math.random() > 0.42;
-    const sol = (0.05 + Math.random()*1.8).toFixed(2);
-    const win = isBuy ? null : Math.random() > 0.32;
-    const pnl = win !== null ? (win ? +(0.02+Math.random()*0.8).toFixed(3) : -(0.01+Math.random()*0.3).toFixed(3)) : null;
-    return { ts, token: tok.name, mc: tok.mc, action: isBuy?'buy':'sell', sol, pnl, win, tx: Array.from({length:8},()=>'0123456789abcdef'[Math.floor(Math.random()*16)]).join(''), isNew: !ago };
+async function parseTx(sig) {
+    const tx = await rpc('getTransaction', [sig, {encoding:'jsonParsed', maxSupportedTransactionVersion:0}]);
+    if (!tx || !tx.meta) return null;
+    const meta = tx.meta;
+    const bt = tx.blockTime;
+    const ts = new Date(bt * 1000).toISOString().substr(11, 8);
+
+    // SOL balance change for signer (index 0)
+    const solDelta = ((meta.postBalances[0] || 0) - (meta.preBalances[0] || 0)) / 1e9;
+
+    // Token balance changes for our wallet
+    const pre = {};
+    const post = {};
+    (meta.preTokenBalances || []).forEach(t => {
+        if (t.owner === WALLET && t.mint !== WSOL) pre[t.mint] = parseFloat(t.uiTokenAmount?.uiAmountString || '0');
+    });
+    (meta.postTokenBalances || []).forEach(t => {
+        if (t.owner === WALLET && t.mint !== WSOL) post[t.mint] = parseFloat(t.uiTokenAmount?.uiAmountString || '0');
+    });
+
+    const allMints = [...new Set([...Object.keys(pre), ...Object.keys(post)])];
+    const results = [];
+    for (const mint of allMints) {
+        const delta = (post[mint] || 0) - (pre[mint] || 0);
+        if (Math.abs(delta) < 0.001) continue;
+        const action = delta > 0 ? 'buy' : 'sell';
+        const solAmt = Math.abs(solDelta);
+        const info = await getTokenInfo(mint);
+        results.push({
+            ts, action, sol: solAmt.toFixed(3),
+            token: info.symbol, mc: info.mc,
+            sig: sig.slice(0, 12), fullSig: sig,
+            blockTime: bt, isNew: false
+        });
+    }
+    return results.length > 0 ? results : null;
 }
 
-function render() {
+function renderTrades() {
     feed.innerHTML = '';
+    if (trades.length === 0) {
+        feed.innerHTML = '<div style="color:#333;padding:20px;text-align:center;">Fetching live trades from wallet...</div>';
+        return;
+    }
     trades.forEach((t, i) => {
         const d = document.createElement('div');
         d.className = 'tl' + (t.isNew && i === 0 ? ' new' : '');
-        const pnlH = t.pnl !== null
-            ? `<span class="tl-pnl ${t.win?'w':'l'}">${t.win?'+':''}${t.pnl} SOL</span>`
-            : '<span style="color:#333">holding...</span>';
+        const mcStr = t.mc ? `MC: ${fmtMc(t.mc)}` : '';
+        const solscanUrl = `https://solscan.io/tx/${t.fullSig}`;
         d.innerHTML = `
             <div class="tl-top">
                 <span class="tl-time">${t.ts}</span>
                 <span class="tl-token"><span class="tk">$${t.token}</span></span>
                 <span class="tl-action ${t.action}">${t.action.toUpperCase()}</span>
                 <span style="color:#444">${t.sol} SOL</span>
-                ${pnlH}
+                ${t.action === 'sell' ? `<span class="tl-pnl w">closed</span>` : '<span style="color:#333">holding...</span>'}
             </div>
             <div class="tl-bot">
-                <span class="tl-detail">MC: ${fmtMc(t.mc)}</span>
-                ${t.win ? `<span class="tl-tx">✓ +${Math.abs(t.pnl)} SOL → holders | tx: ${t.tx}...</span>` : `<span class="tl-detail">tx: ${t.tx}...</span>`}
+                <span class="tl-detail">${mcStr}</span>
+                <a href="${solscanUrl}" target="_blank" class="tl-tx" style="text-decoration:none">tx: ${t.sig}... ↗</a>
             </div>`;
         feed.appendChild(d);
     });
 }
 
+let lastSig = null;
+async function fetchTrades(isRefresh) {
+    try {
+        const params = [{limit: isRefresh ? 5 : 20}];
+        if (isRefresh && lastSig) params[0].until = lastSig;
+        const sigs = await rpc('getSignaturesForAddress', [WALLET, params[0]]);
+        if (!sigs || sigs.length === 0) return;
+
+        if (!isRefresh) lastSig = sigs[0].signature;
+
+        const okSigs = sigs.filter(s => !s.err).map(s => s.signature);
+        // Parse in parallel (max 5 at a time)
+        const batch = okSigs.slice(0, isRefresh ? 3 : 15);
+        const parsed = await Promise.all(batch.map(s => parseTx(s).catch(() => null)));
+        const newTrades = parsed.flat().filter(Boolean);
+
+        if (isRefresh && newTrades.length > 0) {
+            newTrades[0].isNew = true;
+            trades.forEach(t => t.isNew = false);
+            trades = [...newTrades, ...trades].slice(0, 30);
+            lastSig = sigs[0].signature;
+        } else if (!isRefresh) {
+            trades = newTrades.slice(0, 30);
+        }
+        renderTrades();
+    } catch(e) {
+        console.error('Feed error:', e);
+    }
+}
+
 async function init() {
-    await fetchTokens();
-    for (let i = 0; i < 18; i++) trades.push(genTrade(i*2.5));
-    render();
-    setInterval(() => {
-        const newTrade = genTrade(0);
-        newTrade.isNew = true;
-        trades.forEach(t => t.isNew = false);
-        trades.unshift(newTrade);
-        if (trades.length > 30) trades.pop();
-        render();
-        const c = document.getElementById('sc');
-        const cur = parseInt(c.textContent);
-        c.textContent = cur + 1;
-    }, 10000);
-    setInterval(fetchTokens, 120000);
+    renderTrades(); // show loading state
+    await fetchTrades(false);
+    // Refresh every 30 seconds
+    setInterval(() => fetchTrades(true), 30000);
 }
 
 // PARALLAX on scroll
